@@ -34,6 +34,12 @@ GI.extent(n::STRNode) = n.extent
 GI.extent(n::STRLeafNode) = foldl(Extents.union, n.extents)
 
 
+function Base.show(io::IO, tree::GISTRtree.STRtree)
+    println(io, "STRtree")
+    display(tree.rootnode.extent)
+end
+
+
 function leafnodes(geoms; nodecapacity=10)
     extents_indices = [(GI.extent(geoms[i]), i) for i in eachindex(geoms)]
     perm = sortperm(extents_indices; by=(v -> ((v[1][1][1] + v[1][1][2]) / 2)))  # [extent/index][dim][min/max] sort by x
