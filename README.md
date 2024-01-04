@@ -16,4 +16,6 @@ query_result = query(tree, Extent(X=(0, 100.5), Y=(0, 1.5)))
 query_result = query(tree, query_geometry)
 ```
 
+The query result is a `Vector{Int}` that you can use to index into the collection of geometries from which the tree was created, under the assumption that it has not changed since then.
+
 Contributions are welcome! :)
