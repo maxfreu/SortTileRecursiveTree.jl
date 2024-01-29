@@ -1,4 +1,4 @@
-name = "GISTRtree"
+name = "SortTileRecursiveTree"
 uuid = "746ee33f-1797-42c2-866d-db2fce69d14d"
 authors = ["Max Freudenberg <maximilian.freudenberg@uni-goettingen.de> and contributors"]
 version = "0.1.0"

@@ -1,13 +1,13 @@
-# GISTRtree
+# SortTileRecursiveTree
 
-[![Build Status](https://github.com/maxfreu/GISTRtree.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/maxfreu/GISTRtree.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/maxfreu/SortTileRecursiveTree.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/maxfreu/SortTileRecursiveTree.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 An STR tree implementation for GeoInterface compatible geometries.
 
 Usage:
 
 ```julia
-using GISTRtree
+using SortTileRecursiveTree
 using Extents
 
 tree = STRtree(geometries)
