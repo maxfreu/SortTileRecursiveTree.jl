@@ -1,4 +1,4 @@
-module GISTRtree
+module SortTileRecursiveTree
 
 using Extents
 import GeoInterface as GI
@@ -32,6 +32,12 @@ end
 
 GI.extent(n::STRNode) = n.extent
 GI.extent(n::STRLeafNode) = foldl(Extents.union, n.extents)
+
+
+function Base.show(io::IO, tree::SortTileRecursiveTree.STRtree)
+    println(io, "STRtree")
+    display(tree.rootnode.extent)
+end
 
 
 function leafnodes(geoms; nodecapacity=10)
