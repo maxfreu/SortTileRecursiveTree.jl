@@ -36,7 +36,11 @@ GI.extent(n::STRLeafNode) = foldl(Extents.union, n.extents)
 
 function Base.show(io::IO, tree::SortTileRecursiveTree.STRtree)
     println(io, "STRtree")
-    display(tree.rootnode.extent)
+    if tree.rootnode isa STRNode
+        display(tree.rootnode.extent)
+    elseif tree.rootnode isa STRLeafNode
+        display(foldl(Extents.union, tree.rootnode.extents))
+    end
 end
 
 
