@@ -1,7 +1,7 @@
 name = "SortTileRecursiveTree"
 uuid = "746ee33f-1797-42c2-866d-db2fce69d14d"
 authors = ["Max Freudenberg <maximilian.freudenberg@uni-goettingen.de> and contributors"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Extents = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
