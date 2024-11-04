@@ -1,12 +1,3 @@
-module SortTileRecurrsiveTreeAbstractTreesExt
-
-using AbstractTrees
-using SortTileRecursiveTree
-using SortTileRecursiveTree.Extents
-using SortTileRecursiveTree.GI
-
-import SortTileRecursiveTree: STRtree, STRNode, STRLeafNode
-
 AbstractTrees.children(tree::STRtree) = AbstractTrees.children(tree.rootnode)
 AbstractTrees.parent(tree::STRtree) = nothing
 
@@ -37,6 +28,4 @@ AbstractTrees.ChildIndexing(::Type{<: STRNode}) = AbstractTrees.IndexedChildren(
 
 # Type stability fixes
 
-AbstractTrees.NodeType(::Type{<:Union{STRNode, STRLeafNode, STRtree}}) = NodeTypeUnknown()
-
-end
+AbstractTrees.NodeType(::Type{<:Union{STRNode, STRLeafNode, STRtree}}) = AbstractTrees.NodeTypeUnknown()
