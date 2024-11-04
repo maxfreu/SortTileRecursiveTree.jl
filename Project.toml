@@ -4,13 +4,15 @@ authors = ["Max Freudenberg <maximilian.freudenberg@uni-goettingen.de> and contr
 version = "0.1.1"
 
 [deps]
+AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 Extents = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
 GeoInterface = "cf35fbd7-0cd7-5166-be24-54bfbe79505f"
 
 [compat]
-julia = "1.6"
+AbstractTrees = "0.4.5"
 Extents = "0.1.0"
 GeoInterface = "1"
+julia = "1.6"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

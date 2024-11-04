@@ -2,6 +2,7 @@ module SortTileRecursiveTree
 
 using Extents
 import GeoInterface as GI
+import AbstractTrees
 
 
 """
@@ -137,6 +138,9 @@ function query!(query_result::Vector{Int}, node::STRLeafNode, extent::Extent)
     end
 end
 
+
+
+include("abstracttrees.jl")
 
 export STRtree, query
 
