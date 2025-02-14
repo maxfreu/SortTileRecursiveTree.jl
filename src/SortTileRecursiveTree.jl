@@ -45,21 +45,27 @@ end
 
 
 function leafnodes(geoms; nodecapacity=10)
-    extents_indices = [(GI.extent(geoms[i]), i) for i in eachindex(geoms)]
-    perm = sortperm(extents_indices; by=(v -> ((v[1][1][1] + v[1][1][2]) / 2)))  # [extent/index][dim][min/max] sort by x
-    sorted_extents = extents_indices[perm]
-    r = length(sorted_extents)
+    ext1 = GI.extent(first(geoms))
+    extents_indices = Tuple{typeof(ext1),Int}[(GI.extent(geoms[i]), i) for i in eachindex(geoms)]
+    # Use the same scratch space for all sorts
+    scratch = similar(extents_indices)
+    sort!(extents_indices; by=v -> (v[1][1][1] + v[1][1][2]) / 2, scratch)  # [extent/index][dim][min/max] sort by x
+    r = length(extents_indices)
     P = ceil(Int, r / nodecapacity)
     S = ceil(Int, sqrt(P))
-    x_splits = Iterators.partition(sorted_extents, S * nodecapacity)
+    x_splits = Iterators.partition(extents_indices, S * nodecapacity)
     
     nodes = STRLeafNode{Vector{typeof(extents_indices[1][1])}}[]
     for x_split in x_splits
-        perm = sortperm(x_split; by=(v -> ((v[1][2][1] + v[1][2][2]) / 2)))  # [extent/index][dim][min/max] sort by y
-        sorted_split = x_split[perm]
-        y_splits = Iterators.partition(sorted_split, nodecapacity)
+        sort!(x_split; 
+            by=v -> (v[1][2][1] + v[1][2][2]) / 2, 
+            scratch=resize!(scratch, length(x_split)),
+        )  # [extent/index][dim][min/max] sort by y
+        y_splits = Iterators.partition(x_split, nodecapacity)
         for y_split in y_splits
-            push!(nodes, STRLeafNode(getindex.(y_split,1), getindex.(y_split,2)))
+            exts = first.(y_split)::Vector{typeof(ext1)}
+            inds = last.(y_split)::Vector{Int}
+            push!(nodes, STRLeafNode(exts, inds))
         end
     end
     return nodes
@@ -68,23 +74,28 @@ end
 
 # a bit of duplication...
 function parentnodes(nodes; nodecapacity=10)
-    extents_indices = [(GI.extent(node), node) for node in nodes]
-    perm = sortperm(extents_indices; by=(v -> ((v[1][1][1] + v[1][1][2]) / 2)))  # [extent/node][dim][min/max] sort by x
-    sorted_extents = extents_indices[perm]
-    r = length(sorted_extents)
+    n1 = first(nodes)
+    ext1 = GI.extent(n1)
+    extent_indices = Tuple{typeof(ext1),typeof(n1)}[(GI.extent(node), node) for node in nodes]
+    sort!(extent_indices; by=v -> (v[1][1][1] + v[1][1][2]) / 2)  # [extent/node][dim][min/max] sort by x
+    r = length(extent_indices)
     P = ceil(Int, r / nodecapacity)
     S = ceil(Int, sqrt(P))
-    x_splits = Iterators.partition(sorted_extents, S * nodecapacity)
+    x_splits = Iterators.partition(extent_indices, S * nodecapacity)
     
-    T = typeof(extents_indices[1][1])
-    N = Vector{typeof(extents_indices[1][2])}
+    T = typeof(extent_indices[1][1])
+    N = Vector{typeof(extent_indices[1][2])}
     nodes = STRNode{T, N}[]
     for x_split in x_splits
-        perm = sortperm(x_split; by=(v -> ((v[1][2][1] + v[1][2][2]) / 2)))  # [extent/index][dim][min/max] sort by y
-        sorted_split = x_split[perm]
-        y_splits = Iterators.partition(sorted_split, nodecapacity)
+        sort!(x_split; by=v -> (v[1][2][1] + v[1][2][2]) / 2)  # [extent/index][dim][min/max] sort by y
+        y_splits = Iterators.partition(x_split, nodecapacity)
         for y_split in y_splits
-            push!(nodes, STRNode(foldl(Extents.union, getindex.(y_split,1)), getindex.(y_split,2)))
+            # Alloc free union over the extents
+            ext = foldl(y_split; init=y_split[1][1]) do u, (ext, _)
+                Extents.union(u, ext)
+            end
+            nodes = last.(y_split)::Vector{typeof(n1)}
+            push!(nodes, STRNode(ext, nodes))
         end
     end
     return nodes
