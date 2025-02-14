@@ -58,9 +58,9 @@ function leafnodes(geoms; nodecapacity=10)
     nodes = STRLeafNode{Vector{typeof(extents_indices[1][1])}}[]
     for x_split in x_splits
         sort!(x_split; 
-            by=v -> (v[1][2][1] + v[1][2][2]) / 2, 
+            by=v -> (v[1][2][1] + v[1][2][2]) / 2, # [extent/index][dim][min/max] sort by y
             scratch=resize!(scratch, length(x_split)),
-        )  # [extent/index][dim][min/max] sort by y
+        ) 
         y_splits = Iterators.partition(x_split, nodecapacity)
         for y_split in y_splits
             exts = first.(y_split)::Vector{typeof(ext1)}
@@ -77,7 +77,8 @@ function parentnodes(nodes; nodecapacity=10)
     n1 = first(nodes)
     ext1 = GI.extent(n1)
     extent_indices = Tuple{typeof(ext1),typeof(n1)}[(GI.extent(node), node) for node in nodes]
-    sort!(extent_indices; by=v -> (v[1][1][1] + v[1][1][2]) / 2)  # [extent/node][dim][min/max] sort by x
+    scratch = similar(extents_indices)
+    sort!(extent_indices; by=v -> (v[1][1][1] + v[1][1][2]) / 2, scratch)  # [extent/node][dim][min/max] sort by x
     r = length(extent_indices)
     P = ceil(Int, r / nodecapacity)
     S = ceil(Int, sqrt(P))
@@ -87,7 +88,10 @@ function parentnodes(nodes; nodecapacity=10)
     N = Vector{typeof(extent_indices[1][2])}
     nodes = STRNode{T, N}[]
     for x_split in x_splits
-        sort!(x_split; by=v -> (v[1][2][1] + v[1][2][2]) / 2)  # [extent/index][dim][min/max] sort by y
+        sort!(x_split; 
+            by=v -> (v[1][2][1] + v[1][2][2]) / 2 # [extent/index][dim][min/max] sort by y
+            scratch=resize!(scratch, length(x_split)),
+        ) 
         y_splits = Iterators.partition(x_split, nodecapacity)
         for y_split in y_splits
             # Alloc free union over the extents
