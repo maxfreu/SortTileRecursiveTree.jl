@@ -25,13 +25,16 @@ end
 
 
 struct STRLeafNode{E}
-    extents::E
+    extent::E
+    extents::Vector{E}
     indices::Vector{Int}
 end
+STRLeafNode(extents::Vector, indices::Vector) =
+    STRLeafNode(foldl(Extents.union, extents), extents, indices)
 
 
-GI.extent(n::STRNode) = n.extent
-GI.extent(n::STRLeafNode) = foldl(Extents.union, n.extents)
+Extents.extent(n::STRNode) = n.extent
+Extents.extent(n::STRLeafNode) = n.extent
 
 
 function Base.show(io::IO, tree::SortTileRecursiveTree.STRtree)
@@ -53,7 +56,7 @@ function leafnodes(geoms; nodecapacity=10)
     S = ceil(Int, sqrt(P))
     x_splits = Iterators.partition(sorted_extents, S * nodecapacity)
     
-    nodes = STRLeafNode{Vector{typeof(extents_indices[1][1])}}[]
+    nodes = STRLeafNode{typeof(extents_indices[1][1])}[]
     for x_split in x_splits
         perm = sortperm(x_split; by=(v -> ((v[1][2][1] + v[1][2][2]) / 2)))  # [extent/index][dim][min/max] sort by y
         sorted_split = x_split[perm]
