@@ -86,7 +86,7 @@ function parentnodes(nodes; nodecapacity=10)
     
     T = typeof(extents_indices[1][1])
     N = Vector{typeof(extents_indices[1][2])}
-    nodes = STRNode{T, N}[]
+    outnodes = STRNode{T, N}[]
     for x_split in x_splits
         sort!(x_split; 
             by=v -> (v[1][2][1] + v[1][2][2]) / 2, # [extent/index][dim][min/max] sort by y
@@ -98,11 +98,11 @@ function parentnodes(nodes; nodecapacity=10)
             ext = foldl(y_split; init=y_split[1][1]) do u, (ext, _)
                 Extents.union(u, ext)
             end
-            ns = last.(y_split)::Vector{typeof(n1)}
-            push!(nodes, STRNode(ext, ns))
+            y_splitnodes = last.(y_split)::Vector{eltype(nodes)}
+            push!(outnodes, STRNode(ext, y_splitnodes))
         end
     end
-    return nodes
+    return outnodes
 end
 
 
