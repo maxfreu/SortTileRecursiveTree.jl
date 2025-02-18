@@ -4,7 +4,7 @@ using AbstractTrees
 using SortTileRecursiveTree
 using SortTileRecursiveTree: STRtree, STRNode, STRLeafNode
 using Extents
-using AbstractTrees: GI
+import GeoInterface as GI
 
 @testset "AbstractTrees interface" begin
     # Create a simple test tree structure
