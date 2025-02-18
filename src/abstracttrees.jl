@@ -6,11 +6,11 @@ AbstractTrees.nodevalue(tree::STRtree) = AbstractTrees.nodevalue(tree.rootnode)
 # Implement the interface for general STRNodes
 
 AbstractTrees.children(node::STRNode) = node.children
-AbstractTrees.nodevalue(node::STRNode) = node.extent
+AbstractTrees.nodevalue(node::STRNode) = Extents.extent(node)
 
 # Implement the interface for STRLeafNodes
 AbstractTrees.children(node::STRLeafNode) = STRLeafNode[]
-AbstractTrees.nodevalue(node::STRLeafNode) = reduce(Extents.union, node.extents)
+AbstractTrees.nodevalue(node::STRLeafNode) = Extents.extent(node)
 
 
 # Define the traits from AbstractTrees
