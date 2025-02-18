@@ -9,7 +9,7 @@ AbstractTrees.children(node::STRNode) = node.children
 AbstractTrees.nodevalue(node::STRNode) = Extents.extent(node)
 
 # Implement the interface for STRLeafNodes
-AbstractTrees.children(node::STRLeafNode) = STRLeafNode[]
+AbstractTrees.children(node::STRLeafNode) = STRLeafNode[] # no children for a leaf node
 AbstractTrees.nodevalue(node::STRLeafNode) = Extents.extent(node)
 
 
