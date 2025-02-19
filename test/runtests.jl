@@ -34,4 +34,5 @@ import GeoInterface as GI
         @test points[query_result] == points[:,1]
         @test query(tree, Extent(X=(0, 0.5), Y=(0, 0.5))) == []
     end
+    @testset "AbstractTrees interface" begin; include("abstracttrees.jl"); end
 end
