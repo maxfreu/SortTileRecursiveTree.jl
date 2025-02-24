@@ -15,6 +15,7 @@ import GeoInterface as GI
 
         @test query(tree, Extent(X=(0, 1.5), Y=(0, 1.5))) == [1]
         @test query(tree, Extent(X=(0, 0.5), Y=(0, 0.5))) == []
+        @test_throws ArgumentError query(tree, 1)
     end
     
     @testset "Many points" begin
