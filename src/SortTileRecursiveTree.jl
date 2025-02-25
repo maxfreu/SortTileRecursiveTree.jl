@@ -134,8 +134,11 @@ function query(tree::STRtree, extent::Extent)
     query!(query_result, tree.rootnode, extent)
     return unique(sort!(query_result))
 end
-
-query(tree::STRtree, geom) = query(tree, GI.extent(geom))
+function query(tree::STRtree, geom) 
+    ext = GI.extent(geom)
+    isnothing(ext) && throw(ArgumentError("No Extent found in object $geom"))
+    return query(tree, ext)
+end
 
 """recursively query the nodes until a leaf node is reached"""
 function query!(query_result::Vector{Int}, node::STRNode, extent::Extent)
