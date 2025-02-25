@@ -8,6 +8,12 @@ AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 Extents = "411431e0-e8b7-467b-b5e0-f676ba4f2910"
 GeoInterface = "cf35fbd7-0cd7-5166-be24-54bfbe79505f"
 
+[weakdeps]
+RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
+
+[extensions]
+STRTreeRecipesBaseExt = "RecipesBase"
+
 [compat]
 AbstractTrees = "0.4.5"
 Extents = "0.1.0"
