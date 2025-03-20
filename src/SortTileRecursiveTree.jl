@@ -33,7 +33,7 @@ end
 STRLeafNode(extents::Vector, indices::Vector) =
     STRLeafNode(foldl(Extents.union, extents), extents, indices)
 
-
+Extents.extent(t::STRtree) = Extents.extent(t.rootnode)
 Extents.extent(n::STRNode) = n.extent
 Extents.extent(n::STRLeafNode) = n.extent
 
